@@ -1,0 +1,103 @@
+.sidebar {
+    background-color: $mainColor;
+    height: 100%;
+    width: 16.67%;      // 1200px -> 200px
+
+    > div:first-child {
+        margin: 2.8rem 0 8.5rem 0;
+        text-align: center;
+        width: 100%;
+        .logo {
+            aspect-ratio: 1 / 1;
+            margin: auto;
+            width: 24%;
+
+            & + p {
+                font-family: $loraFont;
+            }
+        }
+    }
+
+    > .menu {
+        width: 100%;
+        ul {
+            text-align: center;
+            font-family: $notoFont;
+            font-weight: bold;
+            div {
+                background-color: $mainColor;
+                border-radius: 10px;
+                height: 25px;
+                width: 100%;
+                position: relative;
+                z-index: 2;
+            }
+            li {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                height: 4rem;
+                margin: 1.8rem 0;
+                animation-name:slideTextY20;
+                animation-duration:0.8s;
+                animation-fill-mode:forwards;
+                opacity: 0;
+                @keyframes slideTextY20 {
+                    from {
+                        transform: translateY(-20%); /*要素を上から下に移動*/
+                        opacity: 0;
+                    }
+                
+                    to {
+                        transform: translateY(0);/*要素を元の位置に移動*/
+                        opacity: 1;
+                    }
+                }
+                &.active {
+                    color: $mainColor;
+                    position: relative;
+                    z-index: 0;
+                    animation-name:slideTextX100;
+                    animation-delay: 0.4s;
+                    animation-duration:0.8s;
+                    animation-fill-mode:forwards;
+                    margin: 0;
+                    opacity: 0;
+                    @keyframes slideTextX100 {
+                        from {
+                            transform: translateX(50%); /*要素を左の枠外に移動*/
+                            opacity: 0;
+                        }
+                    
+                        to {
+                            transform: translateX(0);/*要素を元の位置に移動*/
+                            opacity: 1;
+                        }
+                    }
+                    &::before {
+                        background-color: $grayColor;
+                        border-radius: 3rem 0 0 3rem;
+                        bottom: 0;
+                        content: '';
+                        height: 100%;
+                        width: 90%;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    &::after {
+                        background-color: $grayColor;
+                        content: '';
+                        position: absolute;
+                        right: 0;
+                        height: 7rem;
+                        width: 20%;
+                    }
+                }
+                // > span {
+                //     &::
+                // }
+            }
+        }
+    }
+}

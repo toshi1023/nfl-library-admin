@@ -1,0 +1,47 @@
+// TableSearchコンポーネント
+.tableSearch {
+    width: 100%;
+    height: 4rem;
+
+    .searchField {
+        width: 100%;
+    }
+}
+
+// ToggleButtonコンポーネント
+.toggleButton {
+    color: $whiteColor;
+    display: flex;
+    font-family: $notoFont;
+    font-size: 1.6rem;
+    font-weight: bold;
+    width: 100%;
+    height: 4rem;
+
+    > button {
+        align-items: center;
+        border: none;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        width: 50%;
+        &.left {
+            background-color: $afcColor;
+        }
+        &.right {
+            background-color: $nfcColor;
+        }
+        &.inactive {
+            background-color: $inactiveColor;
+        }
+    }
+}
+
+.baseTableHeader {
+    background-color: black;
+    .cell {
+        color: #fff;
+        font-weight: bold;
+        font-family: $notoFont;
+    }
+}

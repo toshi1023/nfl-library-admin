@@ -1,0 +1,23 @@
+.searchBox {
+    margin-bottom: 3rem;
+    width: 33%;
+}
+
+.test {
+    background-color: #FFF;
+    border-radius: 1rem;
+    box-shadow: .3rem .3rem .3rem rgba(0, 0, 0, 0.2);
+    color: black;
+
+    .tableContainer {
+        padding: 1rem;
+
+        .cell {
+            color: #FFF;
+        }
+    }
+
+    .toggleButton {
+        width: 36.8%;       // 803pxに対して296px
+    }
+}

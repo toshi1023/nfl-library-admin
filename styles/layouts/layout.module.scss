@@ -1,0 +1,28 @@
+#layout {
+    display: flex;
+    height: 100vh;
+    .main {
+        background-color: $grayColor;
+        border-radius: 3rem;
+        box-shadow: .3rem .3rem .3rem rgba(0, 0, 0, 0.2);
+        width: 100%;
+        animation-name: fadeContents;
+        animation: zoomIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
+        opacity: 0;
+        padding: 3rem 0;
+        @keyframes zoomIn {
+            0% {
+              transform: scale(0.5);
+              opacity: 0;
+            }
+            100% {
+              opacity: 1;
+              transform: scale(1);
+            }
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+    }
+}

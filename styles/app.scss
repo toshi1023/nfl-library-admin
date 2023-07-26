@@ -1,0 +1,22 @@
+html {
+    font-size: 10px;
+    font-family: $notoFont;
+
+    body {
+        background-color: $mainColor;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    p, span, li {
+        font-size: 1.6rem;
+    }
+
+    li {
+        list-style: none;
+        cursor: pointer;
+    }
+}
