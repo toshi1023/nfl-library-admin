@@ -1,4 +1,6 @@
-// TableSearchコンポーネント
+/******************************************************************
+* TableSearch
+*******************************************************************/
 .tableSearch {
     width: 100%;
     height: 4rem;
@@ -8,7 +10,9 @@
     }
 }
 
-// ToggleButtonコンポーネント
+/******************************************************************
+* ToggleButton
+*******************************************************************/
 .toggleButton {
     color: $whiteColor;
     display: flex;
@@ -37,11 +41,111 @@
     }
 }
 
-.baseTableHeader {
-    background-color: black;
-    .cell {
-        color: #fff;
-        font-weight: bold;
-        font-family: $notoFont;
+.baseTable {
+    .baseTableHeader {
+        background-color: black;
+        .cell {
+            color: #fff;
+            font-weight: bold;
+            font-family: $notoFont;
+        }
+    }
+    .baseTableBody {
+        .cell {
+            padding: 8px;
+        }
+    }
+    th, td {
+        font-size: 1.4rem !important;
+    }
+    .avatar {
+        margin: 0 auto;
+    }
+}
+
+.rowExpanded {
+    padding: 0;
+}
+
+/******************************************************************
+* PlayerCard
+*******************************************************************/
+.playerCard {
+    background-color: $whiteColor;
+    border-radius: 2ch;
+    border: 1px solid hsl(0 0% 83%);
+    box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);
+    font-size: 1.6rem;
+    width: 50%;
+    margin: auto;
+    padding: 15px 30px;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        .position {
+            font-size: 3rem;
+            text-align:center;
+            line-height:0.95em;
+            font-weight:bold;
+            color: transparent;
+            background: repeating-linear-gradient( 45deg, #9E9E9E 0 0.1em, #000 0.1em 0.2em );
+            -webkit-background-clip: text;
+        }
+        .avatarContainer {
+            aspect-ratio: 1;
+            height: auto;
+            width: 15%;
+            margin: auto;
+            .avatar {
+                height: 100%;
+                width: 100%;
+            }
+        }
+        .rating {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: $dataColor;
+            border-radius: 50%;
+            height: 6rem;
+            width: 6rem;
+            p {
+                font-weight: 600;
+                color: $whiteColor;
+            }
+        }
+    }
+    .body {
+        .fullName {
+            color: $dataColor;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .infoContainer {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            > div {
+                display: flex;
+                gap: 10px;
+                > div {
+                    width: calc(50% - 10px);
+                }
+                label {
+                    color: $labelColor;
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                }
+                p {
+                    color: $dataColor;
+                    font-size: 1.8rem;
+                    font-weight: 500;
+                }
+            }
+        }
     }
 }

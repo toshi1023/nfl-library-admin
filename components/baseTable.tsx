@@ -1,7 +1,12 @@
 import React from 'react';
 import styles from '@/styles/components/component.module.scss'
+import PlayerCard from './playerCard';
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,65 +19,49 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-interface IBaseTable {
-    column: string[],
-    row: object
-}
-
 const createData = (
+    id: number,
+    image: string,
     name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-    price: number,
+    age: number,
+    position: string,
+    rating: number
 ) => {
     return {
+        id,
+        image,
         name,
-        calories,
-        fat,
-        carbs,
-        protein,
-        price,
-        history: [
-            {
-                date: '2020-01-05',
-                customerId: '11091700',
-                amount: 3,
-            },
-            {
-                date: '2020-01-02',
-                customerId: 'Anonymous',
-                amount: 1,
-            },
-        ],
+        age,
+        position,
+        rating
     };
 }
 
 const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-    createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-    createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-    createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
+    createData(1, '', 'Brock Purdy', 23, 'QB', 73),
+    createData(2, '', 'Deebo Samuel', 27, 'WR', 89),
+    createData(3, '', 'Nick Bosa', 26, 'RE', 98),
+    createData(4, '', 'Trent Williams', 37, 'LT', 98),
+    createData(5, '', 'Christian Mccaffrey', 27, 'HB', 96),
 ];
 
-// const BaseTable: React.FC<IBaseTable> = (props) => {
 const BaseTable: React.FC = () => {
     return (
-        <TableContainer component={Paper}>
+        <TableContainer className={styles.baseTable} component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead className={styles.baseTableHeader}>
                     <TableRow>
-                        <TableCell className={styles.cell} />
-                        <TableCell className={styles.cell} >Dessert (100g serving)</TableCell>
-                        <TableCell align="right">Calories</TableCell>
-                        <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                        <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                        <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                        <TableCell className={styles.cell} style={{width: '10%'}} />
+                        <TableCell className={styles.cell} style={{width: '10%'}}>ID</TableCell>
+                        <TableCell className={styles.cell} style={{width: '10%'}} align="center">Face</TableCell>
+                        <TableCell className={styles.cell} style={{width: '25%'}} align="center">Name</TableCell>
+                        <TableCell className={styles.cell} style={{width: '10%'}} align="center">Age</TableCell>
+                        <TableCell className={styles.cell} style={{width: '10%'}} align="center">Position</TableCell>
+                        <TableCell className={styles.cell} style={{width: '10%'}} align="center">Rating</TableCell>
+                        <TableCell className={styles.cell} style={{width: '15%'}} align="center">Option</TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className={styles.baseTableBody}>
                     {rows.map((row) => (
                         <Row key={row.name} row={row} />
                     ))}
@@ -88,56 +77,37 @@ const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
   
     return (
         <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-                <TableCell>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset', padding: '8px' } }}>
+                <TableCell align='center' className={styles.cell}>
                     <IconButton
-                    aria-label="expand row"
-                    size="small"
-                    onClick={() => setOpen(!open)}
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setOpen(!open)}
                     >
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell align="left" className={styles.cell}>{row.id}</TableCell>
+                <TableCell align="center" className={styles.cell}>
+                    <Avatar className={styles.avatar} alt="" src={row.image} />
+                </TableCell>
+                <TableCell scope="row" className={styles.cell}>
                     {row.name}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="center" className={styles.cell}>{row.age}</TableCell>
+                <TableCell align="center" className={styles.cell}>{row.position}</TableCell>
+                <TableCell align="center" className={styles.cell}>{row.rating}</TableCell>
+                <TableCell align="center" className={styles.cell}>
+                    <Button variant="contained" color="primary" sx={{width: '10px'}}><EditIcon /></Button>
+                    <Button variant="contained" color="error" sx={{width: '10px'}}><DeleteIcon /></Button>
+                </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell colSpan={8} className={styles.rowExpanded}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                    <Box sx={{ margin: 1 }}>
-                        <Typography variant="h6" gutterBottom component="div">
-                        History
-                        </Typography>
-                        <Table size="small" aria-label="purchases">
-                        <TableHead>
-                            <TableRow>
-                            <TableCell>Date</TableCell>
-                            <TableCell>Customer</TableCell>
-                            <TableCell align="right">Amount</TableCell>
-                            <TableCell align="right">Total price ($)</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {row.history.map((historyRow) => (
-                            <TableRow key={historyRow.date}>
-                                <TableCell component="th" scope="row">
-                                {historyRow.date}
-                                </TableCell>
-                                <TableCell>{historyRow.customerId}</TableCell>
-                                <TableCell align="right">{historyRow.amount}</TableCell>
-                                <TableCell align="right">
-                                    {Math.round(historyRow.amount * row.price * 100) / 100}
-                                </TableCell>
-                            </TableRow>
-                            ))}
-                        </TableBody>
-                        </Table>
-                    </Box>
+                        <Box sx={{ margin: 1 }}>
+                            <PlayerCard />
+                        </Box>
                     </Collapse>
                 </TableCell>
             </TableRow>

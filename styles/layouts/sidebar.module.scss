@@ -3,6 +3,11 @@
     height: 100%;
     width: 16.67%;      // 1200px -> 200px
 
+    p {
+        color: $whiteColor;
+        font-weight: 600;
+    }
+
     > div:first-child {
         margin: 2.8rem 0 8.5rem 0;
         text-align: center;
@@ -34,6 +39,7 @@
             }
             li {
                 align-items: center;
+                color: $whiteColor;
                 display: flex;
                 justify-content: center;
                 height: 4rem;
@@ -94,9 +100,6 @@
                         width: 20%;
                     }
                 }
-                // > span {
-                //     &::
-                // }
             }
         }
     }
