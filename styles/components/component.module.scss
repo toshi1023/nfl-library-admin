@@ -41,32 +41,6 @@
     }
 }
 
-.baseTable {
-    .baseTableHeader {
-        background-color: black;
-        .cell {
-            color: #fff;
-            font-weight: bold;
-            font-family: $notoFont;
-        }
-    }
-    .baseTableBody {
-        .cell {
-            padding: 8px;
-        }
-    }
-    th, td {
-        font-size: 1.4rem !important;
-    }
-    .avatar {
-        margin: 0 auto;
-    }
-}
-
-.rowExpanded {
-    padding: 0;
-}
-
 /******************************************************************
 * PlayerCard
 *******************************************************************/

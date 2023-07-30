@@ -1,6 +1,9 @@
-import React from 'react';
-import styles from '@/styles/components/component.module.scss'
-import PlayerCard from './playerCard';
+import React, { useState } from 'react'
+import BaseTable from '@/components/baseTable'
+import TableSearch from '@/components/tableSearch'
+import ToggleButton from '@/components/toggleButton'
+import styles from '@/styles/pages/roster.module.scss'
+import PlayerCard from '../../components/playerCard';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -18,6 +21,9 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+/******************************************************************
+* 変数定義
+*******************************************************************/
 const createData = (
     id: number,
     image: string,
@@ -44,32 +50,9 @@ const rows = [
     createData(5, '', 'Christian Mccaffrey', 27, 'HB', 96),
 ];
 
-const BaseTable: React.FC = () => {
-    return (
-        <TableContainer className='baseTable' component={Paper}>
-            <Table aria-label="collapsible table">
-                <TableHead className='baseTableHeader'>
-                    <TableRow>
-                        <TableCell className='cell' style={{width: '10%'}} />
-                        <TableCell className='cell' style={{width: '10%'}}>ID</TableCell>
-                        <TableCell className='cell' style={{width: '10%'}} align="center">Face</TableCell>
-                        <TableCell className='cell' style={{width: '25%'}} align="center">Name</TableCell>
-                        <TableCell className='cell' style={{width: '10%'}} align="center">Age</TableCell>
-                        <TableCell className='cell' style={{width: '10%'}} align="center">Position</TableCell>
-                        <TableCell className='cell' style={{width: '10%'}} align="center">Rating</TableCell>
-                        <TableCell className='cell' style={{width: '15%'}} align="center">Option</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody className={styles.baseTableBody}>
-                    {rows.map((row) => (
-                        <Row key={row.name} row={row} />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    )
-}
-  
+/******************************************************************
+* コンポーネント関数
+*******************************************************************/
 const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
@@ -101,8 +84,8 @@ const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
                     <Button variant="contained" color="error" sx={{width: '10px'}}><DeleteIcon /></Button>
                 </TableCell>
             </TableRow>
-            <TableRow>
-                <TableCell colSpan={8} className='rowExpanded'>
+            <TableRow className='rowExpanded'>
+                <TableCell colSpan={8}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <PlayerCard />
@@ -114,4 +97,52 @@ const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
     );
 }
 
-export default BaseTable
+/******************************************************************
+* メイン関数
+*******************************************************************/
+const index: React.FC = () => {
+    const [conf, setConf] = useState(1)
+    const tbCallback = (val: number) => {
+        setConf(val)
+    }
+
+    return (
+        <div>
+            <div className={styles.searchBox}>
+                <TableSearch />
+            </div>
+            <div className={styles.roster}>
+                <div className={styles.toggleButton}>
+                    <ToggleButton conf={conf} callback={tbCallback} />
+                </div>
+            </div>
+            <div className={styles.roster}>
+                <div className={styles.tableContainer}>
+                    <TableContainer className='baseTable' component={Paper}>
+                        <Table aria-label="collapsible table">
+                            <TableHead className='baseTableHeader'>
+                                <TableRow>
+                                    <TableCell className='cell' style={{width: '10%'}} />
+                                    <TableCell className='cell' style={{width: '10%'}}>ID</TableCell>
+                                    <TableCell className='cell' style={{width: '10%'}} align="center">Face</TableCell>
+                                    <TableCell className='cell' style={{width: '25%'}} align="center">Name</TableCell>
+                                    <TableCell className='cell' style={{width: '10%'}} align="center">Age</TableCell>
+                                    <TableCell className='cell' style={{width: '10%'}} align="center">Position</TableCell>
+                                    <TableCell className='cell' style={{width: '10%'}} align="center">Rating</TableCell>
+                                    <TableCell className='cell' style={{width: '15%'}} align="center">Option</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody className='baseTableBody'>
+                                {rows.map((row) => (
+                                    <Row key={row.id} row={row} />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default index
