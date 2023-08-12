@@ -1,11 +1,11 @@
 #layout {
     display: flex;
-    height: 100vh;
+    // height: 100vh;
     .main {
         background-color: $grayColor;
         border-radius: 3rem;
         box-shadow: .3rem .3rem .3rem rgba(0, 0, 0, 0.2);
-        width: 100%;
+        width: calc(100% - 15%);
         animation-name: fadeContents;
         animation: zoomIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
         opacity: 0;

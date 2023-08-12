@@ -1,7 +1,10 @@
 .sidebar {
     background-color: $mainColor;
     height: 100%;
-    width: 16.67%;      // 1200px -> 200px
+    width: 15%;      // 1200px -> 180px
+    min-width: 150px;
+    position: sticky;
+    top: 0px;
 
     p {
         color: $whiteColor;

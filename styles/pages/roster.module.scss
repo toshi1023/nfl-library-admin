@@ -1,6 +1,21 @@
 .searchBox {
+    align-items: flex-end;
+    display: flex;
+    gap: 2rem;
     margin-bottom: 3rem;
-    width: 33%;
+    width: 100%;
+    @media screen and (min-width: $sm) {
+        width: 75%;
+    }
+    @media screen and (min-width: $lg) {
+        width: 60%;
+    }
+    .selectBox {
+        width: 30%;
+    }
+    .tableSearchInput {
+        width: 70%;
+    }
 }
 
 .roster {
@@ -15,5 +30,6 @@
 
     .toggleButton {
         width: 36.8%;       // 803pxに対して296px
+        margin-bottom: 1.5rem;
     }
 }

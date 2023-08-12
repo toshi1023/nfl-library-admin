@@ -6,7 +6,7 @@ interface ITableSearch {
     value?: string
 }
 
-const TableSearch: React.FC<ITableSearch> = (props) => {
+const TableSearchInput: React.FC<ITableSearch> = (props) => {
 
     return (
         <div className={styles.tableSearch}>
@@ -14,7 +14,7 @@ const TableSearch: React.FC<ITableSearch> = (props) => {
                 id="filled-search"
                 label="検索条件を入力する"
                 type="search"
-                variant="filled"
+                variant="standard"
                 className={styles.searchField}
                 defaultValue={props.value}
             />
@@ -22,4 +22,4 @@ const TableSearch: React.FC<ITableSearch> = (props) => {
     )
 }
 
-export default TableSearch
+export default TableSearchInput

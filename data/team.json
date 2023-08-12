@@ -1,0 +1,290 @@
+[
+    {
+        "id": 1,
+        "city": "Buffalo",
+        "name": "Bills",
+        "conference": 1,
+        "area": 1,
+        "image_file": "bills.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 2,
+        "city": "New England",
+        "name": "Patriots",
+        "conference": 1,
+        "area": 1,
+        "image_file": "patriots.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 3,
+        "city": "Miami",
+        "name": "Dolphins",
+        "conference": 1,
+        "area": 1,
+        "image_file": "dolphins.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 4,
+        "city": "New York",
+        "name": "Jets",
+        "conference": 1,
+        "area": 1,
+        "image_file": "jets.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 5,
+        "city": "Cincinnati",
+        "name": "Bengals",
+        "conference": 1,
+        "area": 2,
+        "image_file": "bengals.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 6,
+        "city": "Pittsburgh",
+        "name": "Steelers",
+        "conference": 1,
+        "area": 2,
+        "image_file": "steelers.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 7,
+        "city": "Cleveland",
+        "name": "Browns",
+        "conference": 1,
+        "area": 2,
+        "image_file": "browns.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 8,
+        "city": "Baltimore",
+        "name": "Ravens",
+        "conference": 1,
+        "area": 2,
+        "image_file": "ravens.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 9,
+        "city": "Tennessee",
+        "name": "Titans",
+        "conference": 1,
+        "area": 3,
+        "image_file": "titans.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 10,
+        "city": "Indianapolis",
+        "name": "Colts",
+        "conference": 1,
+        "area": 3,
+        "image_file": "colts.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 11,
+        "city": "Houston",
+        "name": "Texans",
+        "conference": 1,
+        "area": 3,
+        "image_file": "texans.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 12,
+        "city": "Jacksonville",
+        "name": "Jaguars",
+        "conference": 1,
+        "area": 3,
+        "image_file": "jaguars.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 13,
+        "city": "Kansas City",
+        "name": "Chiefs",
+        "conference": 1,
+        "area": 4,
+        "image_file": "chiefs.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 14,
+        "city": "Las Vegas",
+        "name": "Raiders",
+        "conference": 1,
+        "area": 4,
+        "image_file": "raiders.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 15,
+        "city": "Los Angeles",
+        "name": "Chargers",
+        "conference": 1,
+        "area": 4,
+        "image_file": "chargers.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 16,
+        "city": "Denver",
+        "name": "Broncos",
+        "conference": 1,
+        "area": 4,
+        "image_file": "broncos.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 17,
+        "city": "Dallas",
+        "name": "Cowboys",
+        "conference": 2,
+        "area": 1,
+        "image_file": "cowboys.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 18,
+        "city": "Philadelphia",
+        "name": "Eagles",
+        "conference": 2,
+        "area": 1,
+        "image_file": "eagles.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 19,
+        "city": "Washington",
+        "name": "Commanders",
+        "conference": 2,
+        "area": 1,
+        "image_file": "commanders.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 20,
+        "city": "New York",
+        "name": "Giants",
+        "conference": 2,
+        "area": 1,
+        "image_file": "giants.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 21,
+        "city": "Green Bay",
+        "name": "Packers",
+        "conference": 2,
+        "area": 2,
+        "image_file": "packers.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 22,
+        "city": "Minnesota",
+        "name": "Vikings",
+        "conference": 2,
+        "area": 2,
+        "image_file": "vikings.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 23,
+        "city": "Chicago",
+        "name": "Bears",
+        "conference": 2,
+        "area": 2,
+        "image_file": "bears.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 24,
+        "city": "Detroit",
+        "name": "Lions",
+        "conference": 2,
+        "area": 2,
+        "image_file": "lions.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 25,
+        "city": "Tampa Bay",
+        "name": "Buccaneers",
+        "conference": 2,
+        "area": 3,
+        "image_file": "buccaneers.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 26,
+        "city": "New Orleans",
+        "name": "Saints",
+        "conference": 2,
+        "area": 3,
+        "image_file": "saints.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 27,
+        "city": "Atlanta",
+        "name": "Falcons",
+        "conference": 2,
+        "area": 3,
+        "image_file": "falcons.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 28,
+        "city": "Carolina",
+        "name": "Panthers",
+        "conference": 2,
+        "area": 3,
+        "image_file": "panthers.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 29,
+        "city": "Los Angeles",
+        "name": "Rams",
+        "conference": 2,
+        "area": 4,
+        "image_file": "rams.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 30,
+        "city": "Arizona",
+        "name": "Cardinals",
+        "conference": 2,
+        "area": 4,
+        "image_file": "cardinals.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 31,
+        "city": "San Francisco",
+        "name": "49ers",
+        "conference": 2,
+        "area": 4,
+        "image_file": "49ers.gif",
+        "back_image_file": null
+    },
+    {
+        "id": 32,
+        "city": "Seattle",
+        "name": "Seahawks",
+        "conference": 2,
+        "area": 4,
+        "image_file": "seahawks.gif",
+        "back_image_file": null
+    }
+]

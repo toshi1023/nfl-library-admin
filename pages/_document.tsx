@@ -2,8 +2,10 @@ import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="ja">
       <Head>
+        {/* サイトタイトル */}
+        <title>NFL Library Admin</title>
         {/* favicon設定 */}
         <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
@@ -12,8 +14,6 @@ export default function Document() {
         <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
-        {/* サイトタイトル */}
-        <title>NFL Library Admin</title>
       </Head>
       <body>
         <Main />

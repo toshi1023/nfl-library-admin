@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import BaseTable from '@/components/baseTable'
-import TableSearch from '@/components/tableSearch'
+import TeamTabs from '@/components/teamTabs'
+import SelectBox from '@/components/selectBox'
+import TableSearchInput from '@/components/tableSearchInput'
 import ToggleButton from '@/components/toggleButton'
 import styles from '@/styles/pages/roster.module.scss'
 import PlayerCard from '../../components/playerCard';
@@ -20,6 +21,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import json_team from '@/data/team.json'
 
 /******************************************************************
 * 変数定義
@@ -48,7 +50,18 @@ const rows = [
     createData(3, '', 'Nick Bosa', 26, 'RE', 98),
     createData(4, '', 'Trent Williams', 37, 'LT', 98),
     createData(5, '', 'Christian Mccaffrey', 27, 'HB', 96),
+    createData(6, '', 'Brock Purdy', 23, 'QB', 73),
+    createData(7, '', 'Deebo Samuel', 27, 'WR', 89),
+    createData(8, '', 'Nick Bosa', 26, 'RE', 98),
+    createData(9, '', 'Trent Williams', 37, 'LT', 98),
+    createData(10, '', 'Christian Mccaffrey', 27, 'HB', 96),
 ];
+
+const yearSelectList = [
+    {value: 2021, text: '2021'},
+    {value: 2020, text: '2020'},
+    {value: 2019, text: '2019'},
+]
 
 /******************************************************************
 * コンポーネント関数
@@ -101,7 +114,9 @@ const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
 * メイン関数
 *******************************************************************/
 const index: React.FC = () => {
-    const [conf, setConf] = useState(1)
+    const [conf, setConf] = useState<number>(1)
+    const [searchYear, setSearchYear] = useState<number>(yearSelectList[0].value)
+    const [selectTab, setSelectTab] = useState<number>(1)
     const tbCallback = (val: number) => {
         setConf(val)
     }
@@ -109,21 +124,25 @@ const index: React.FC = () => {
     return (
         <div>
             <div className={styles.searchBox}>
-                <TableSearch />
+                <div className={styles.selectBox}>
+                    <SelectBox label='Year' data={yearSelectList} selected={searchYear} callback={(value: number) => setSearchYear(value)} />
+                </div>
+                <div className={styles.tableSearchInput}>
+                    <TableSearchInput />
+                </div>
             </div>
             <div className={styles.roster}>
                 <div className={styles.toggleButton}>
                     <ToggleButton conf={conf} callback={tbCallback} />
                 </div>
-            </div>
-            <div className={styles.roster}>
+                <TeamTabs data={json_team} selectConf={conf} selectTab={selectTab} callback={(value) => setSelectTab(value)} />
                 <div className={styles.tableContainer}>
                     <TableContainer className='baseTable' component={Paper}>
                         <Table aria-label="collapsible table">
                             <TableHead className='baseTableHeader'>
                                 <TableRow>
                                     <TableCell className='cell' style={{width: '10%'}} />
-                                    <TableCell className='cell' style={{width: '10%'}}>ID</TableCell>
+                                    <TableCell className='cell' style={{width: '10%'}} align="center">ID</TableCell>
                                     <TableCell className='cell' style={{width: '10%'}} align="center">Face</TableCell>
                                     <TableCell className='cell' style={{width: '25%'}} align="center">Name</TableCell>
                                     <TableCell className='cell' style={{width: '10%'}} align="center">Age</TableCell>
