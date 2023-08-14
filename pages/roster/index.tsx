@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import TeamTabs from '@/components/teamTabs'
 import SelectBox from '@/components/selectBox'
 import TableSearchInput from '@/components/tableSearchInput'
 import ToggleButton from '@/components/toggleButton'
 import styles from '@/styles/pages/roster.module.scss'
 import PlayerCard from '../../components/playerCard';
+import { GetStaticProps, GetStaticPaths, NextPage } from 'next'
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,52 +23,26 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import json_team from '@/data/team.json'
+import { fetchSearchedRoster } from '@/lib/rosterFetch'
+import { ISearchedRosterResponse } from '@/types/fetchTypes'
+import { IRosterDomain } from '@/types/domainTypes'
 
 /******************************************************************
 * 変数定義
 *******************************************************************/
-const createData = (
-    id: number,
-    image: string,
-    name: string,
-    age: number,
-    position: string,
-    rating: number
-) => {
-    return {
-        id,
-        image,
-        name,
-        age,
-        position,
-        rating
-    };
-}
-
-const rows = [
-    createData(1, '', 'Brock Purdy', 23, 'QB', 73),
-    createData(2, '', 'Deebo Samuel', 27, 'WR', 89),
-    createData(3, '', 'Nick Bosa', 26, 'RE', 98),
-    createData(4, '', 'Trent Williams', 37, 'LT', 98),
-    createData(5, '', 'Christian Mccaffrey', 27, 'HB', 96),
-    createData(6, '', 'Brock Purdy', 23, 'QB', 73),
-    createData(7, '', 'Deebo Samuel', 27, 'WR', 89),
-    createData(8, '', 'Nick Bosa', 26, 'RE', 98),
-    createData(9, '', 'Trent Williams', 37, 'LT', 98),
-    createData(10, '', 'Christian Mccaffrey', 27, 'HB', 96),
-];
-
+const defaultYear = 2020
+const defaultTeam = 1
 const yearSelectList = [
-    {value: 2021, text: '2021'},
     {value: 2020, text: '2020'},
     {value: 2019, text: '2019'},
+    {value: 2018, text: '2018'},
 ]
 
 /******************************************************************
 * コンポーネント関数
 *******************************************************************/
-const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
-    const { row } = props;
+const Row: React.FC<{ row: IRosterDomain, season: number }> = (props) => {
+    const { row, season } = props;
     const [open, setOpen] = React.useState(false);
   
     return (
@@ -84,13 +59,13 @@ const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
                 </TableCell>
                 <TableCell align="left" className='cell'>{row.id}</TableCell>
                 <TableCell align="center" className='cell'>
-                    <Avatar className='avatar' alt="" src={row.image} />
+                    <Avatar className='avatar' alt="" src={row.player.image_url} />
                 </TableCell>
                 <TableCell scope="row" className='cell'>
-                    {row.name}
+                    {`${row.player.firstname} ${row.player.lastname}`}
                 </TableCell>
-                <TableCell align="center" className='cell'>{row.age}</TableCell>
-                <TableCell align="center" className='cell'>{row.position}</TableCell>
+                <TableCell align="center" className='cell'>{season - row.player.birthday_year}</TableCell>
+                <TableCell align="center" className='cell'>{row.position.name}</TableCell>
                 <TableCell align="center" className='cell'>{row.rating}</TableCell>
                 <TableCell align="center" className='cell'>
                     <Button variant="contained" color="primary" sx={{width: '10px'}}><EditIcon /></Button>
@@ -113,19 +88,48 @@ const Row: React.FC<{ row: ReturnType<typeof createData> }> = (props) => {
 /******************************************************************
 * メイン関数
 *******************************************************************/
-const index: React.FC = () => {
+type Props = {
+    data: ISearchedRosterResponse
+}
+const index: NextPage<Props> = ({data}) => {
+    const [rosters, setRosters] = useState<IRosterDomain[]>(data.rosters)
     const [conf, setConf] = useState<number>(1)
-    const [searchYear, setSearchYear] = useState<number>(yearSelectList[0].value)
-    const [selectTab, setSelectTab] = useState<number>(1)
-    const tbCallback = (val: number) => {
-        setConf(val)
-    }
+    const [searchSeason, setSearchSeason] = useState<number>(defaultYear)
+    const [selectTeam, setSelectTeam] = useState<number>(defaultTeam)
+    /**
+     * カンファレンスの変更処理
+     * @param value クリックしたカンファレンスの値
+     */
+    const changeConfCallback = useCallback((value: number) => {
+        setConf(value)
+        // NFCを選択した場合
+        if(value === 2 && selectTeam < 17) {
+            setSelectTeam(selectTeam + 16)
+            return
+        }
+        // AFCを選択した場合
+        setSelectTeam(selectTeam - 16)
+    }, [conf])
+
+    useEffect(() => {
+        const fetch = async () => {
+            const query = {
+                season: searchSeason,
+                team: selectTeam,
+                conditions: ''
+            }
+            const data = await fetchSearchedRoster(query)
+            console.log(data)
+            setRosters(data.rosters)
+        }
+        fetch()
+    }, [searchSeason, selectTeam])
 
     return (
         <div>
             <div className={styles.searchBox}>
                 <div className={styles.selectBox}>
-                    <SelectBox label='Year' data={yearSelectList} selected={searchYear} callback={(value: number) => setSearchYear(value)} />
+                    <SelectBox label='Season' data={yearSelectList} selected={searchSeason} callback={useCallback((value: number) => setSearchSeason(value), [searchSeason])} />
                 </div>
                 <div className={styles.tableSearchInput}>
                     <TableSearchInput />
@@ -133,9 +137,9 @@ const index: React.FC = () => {
             </div>
             <div className={styles.roster}>
                 <div className={styles.toggleButton}>
-                    <ToggleButton conf={conf} callback={tbCallback} />
+                    <ToggleButton conf={conf} callback={changeConfCallback} />
                 </div>
-                <TeamTabs data={json_team} selectConf={conf} selectTab={selectTab} callback={(value) => setSelectTab(value)} />
+                <TeamTabs data={json_team} selectConf={conf} selectTab={selectTeam} callback={useCallback((value) => setSelectTeam(value), [selectTeam])} />
                 <div className={styles.tableContainer}>
                     <TableContainer className='baseTable' component={Paper}>
                         <Table aria-label="collapsible table">
@@ -152,8 +156,8 @@ const index: React.FC = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody className='baseTableBody'>
-                                {rows.map((row) => (
-                                    <Row key={row.id} row={row} />
+                                {rosters.map((row) => (
+                                    <Row key={row.id} row={row} season={searchSeason} />
                                 ))}
                             </TableBody>
                         </Table>
@@ -162,6 +166,13 @@ const index: React.FC = () => {
             </div>
         </div>
     )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+    const data = await fetchSearchedRoster({season: defaultYear, team: defaultTeam, conditions: ''})
+    return {
+        props: { data },
+    }
 }
 
 export default index

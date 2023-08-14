@@ -43,4 +43,4 @@ const SelectBox: React.FC<ISelectBox> = (props) => {
   );
 }
 
-export default SelectBox
+export default React.memo(SelectBox)

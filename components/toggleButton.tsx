@@ -26,4 +26,4 @@ const ToggleButton: React.FC<IToggleButton> = (props) => {
     )
 }
 
-export default ToggleButton
+export default React.memo(ToggleButton)

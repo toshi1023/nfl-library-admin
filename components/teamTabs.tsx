@@ -56,7 +56,7 @@ const TeamTabs: React.FC<ITeamTabs> = (props) => {
         }}>
             {
                 props.data.filter(x => x.conference === props.selectConf).map(val => (
-                    <Tab key={val.id} className='teamTabComponent' label={val.name} icon={<IconImage src={`logos/${val.image_file}`} />} {...a11yProps(val.id)} />
+                    <Tab key={val.id} className='teamTabComponent' label={val.name} icon={<IconImage src={`logos/${val.image_file}`} />} value={val.id} {...a11yProps(val.id)} />
                 ))
             }
         </TabList>
@@ -65,4 +65,4 @@ const TeamTabs: React.FC<ITeamTabs> = (props) => {
   );
 }
 
-export default TeamTabs
+export default React.memo(TeamTabs)
