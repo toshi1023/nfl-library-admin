@@ -5,7 +5,7 @@ import TableSearchInput from '@/components/tableSearchInput'
 import ToggleButton from '@/components/toggleButton'
 import styles from '@/styles/pages/roster.module.scss'
 import PlayerCard from '../../components/playerCard';
-import { GetStaticProps, GetStaticPaths, NextPage } from 'next'
+import { GetStaticProps, NextPage } from 'next'
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -26,6 +26,7 @@ import json_team from '@/data/team.json'
 import { fetchSearchedRoster } from '@/lib/rosterFetch'
 import { ISearchedRosterResponse } from '@/types/fetchTypes'
 import { IRosterDomain } from '@/types/domainTypes'
+import OdStatusRadioButton from '@/components/odStatusRadioButton'
 
 /******************************************************************
 * 変数定義
@@ -76,7 +77,7 @@ const Row: React.FC<{ row: IRosterDomain, season: number }> = (props) => {
                 <TableCell colSpan={8}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                            <PlayerCard />
+                            <PlayerCard roster={row} />
                         </Box>
                     </Collapse>
                 </TableCell>
@@ -94,52 +95,76 @@ type Props = {
 const index: NextPage<Props> = ({data}) => {
     const [rosters, setRosters] = useState<IRosterDomain[]>(data.rosters)
     const [conf, setConf] = useState<number>(1)
+    const [status, setStatus] = useState<number>(99)
     const [searchSeason, setSearchSeason] = useState<number>(defaultYear)
     const [selectTeam, setSelectTeam] = useState<number>(defaultTeam)
+    /**
+     * 攻守ステータスの変更処理
+     * @param value クリックしたステータスの値
+     */
+    const changeStatusCallback = useCallback(async (value: number) => {
+        setStatus(value)
+    }, [status])
     /**
      * カンファレンスの変更処理
      * @param value クリックしたカンファレンスの値
      */
-    const changeConfCallback = useCallback((value: number) => {
+    const changeConfCallback = useCallback(async (value: number) => {
         setConf(value)
+        let team = 1
         // NFCを選択した場合
         if(value === 2 && selectTeam < 17) {
-            setSelectTeam(selectTeam + 16)
-            return
+            team = selectTeam + 16
+        } else {
+            // AFCを選択した場合
+            team = selectTeam - 16
         }
-        // AFCを選択した場合
-        setSelectTeam(selectTeam - 16)
+        setSelectTeam(team)
+        // データ再取得
+        await fetch(searchSeason, team)
     }, [conf])
 
-    useEffect(() => {
-        const fetch = async () => {
-            const query = {
-                season: searchSeason,
-                team: selectTeam,
-                conditions: ''
-            }
-            const data = await fetchSearchedRoster(query)
-            console.log(data)
-            setRosters(data.rosters)
+    /**
+     * データ取得API
+     * @param season 検索したシーズンの年代
+     * @param team 選択したチームのID
+     */
+    const fetch = async (season: number, team: number) => {
+        const query = {
+            season: season,
+            team: team,
+            conditions: ''
         }
-        fetch()
-    }, [searchSeason, selectTeam])
+        const data = await fetchSearchedRoster(query)
+        setRosters(data.rosters)
+    }
 
     return (
         <div>
             <div className={styles.searchBox}>
                 <div className={styles.selectBox}>
-                    <SelectBox label='Season' data={yearSelectList} selected={searchSeason} callback={useCallback((value: number) => setSearchSeason(value), [searchSeason])} />
+                    <SelectBox label='Season' data={yearSelectList} selected={searchSeason} callback={useCallback(async (value: number) => {
+                        setSearchSeason(value)
+                        await fetch(value, selectTeam)
+                    }, [searchSeason])} />
                 </div>
                 <div className={styles.tableSearchInput}>
                     <TableSearchInput />
                 </div>
             </div>
             <div className={styles.roster}>
-                <div className={styles.toggleButton}>
-                    <ToggleButton conf={conf} callback={changeConfCallback} />
+                <div className={`fx ${styles.selectButtonContainer}`}>
+                    <div className={styles.toggleButton}>
+                        <ToggleButton conf={conf} callback={changeConfCallback} />
+                    </div>
+                    <div>
+                        <OdStatusRadioButton status={status} callback={changeStatusCallback} />
+                    </div>
                 </div>
-                <TeamTabs data={json_team} selectConf={conf} selectTab={selectTeam} callback={useCallback((value) => setSelectTeam(value), [selectTeam])} />
+                <TeamTabs data={json_team} selectConf={conf} selectTab={selectTeam} callback={useCallback(async (value) => {
+                    setSelectTeam(value)
+                    await fetch(searchSeason, value)
+                }, [selectTeam])} />
                 <div className={styles.tableContainer}>
                     <TableContainer className='baseTable' component={Paper}>
                         <Table aria-label="collapsible table">

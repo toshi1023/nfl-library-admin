@@ -54,6 +54,21 @@ html {
             padding: 0;
         }
     }
+
+    .fx {
+        display: flex;
+
+        &.align-center {
+            align-items: center;
+        }
+        &.justify-center {
+            justify-content: center;
+        }
+        &.center {
+            align-items: center;
+            justify-content: center;
+        }
+    }
 }
 
 /******************************************************************

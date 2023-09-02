@@ -32,7 +32,7 @@ const a11yProps = (index: number) => {
  * @param subprops 
  * @returns 
  */
-const IconImage:React.FC<{src: string | null}> = (subprops) => {
+const IconImage: React.FC<{src: string | null}> = (subprops) => {
     return (
         <div style={{width: 50, height: 50}}>
             <img src={subprops.src ?? ''} />
