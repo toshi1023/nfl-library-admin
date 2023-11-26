@@ -27,6 +27,7 @@ import { fetchSearchedRoster } from '@/lib/rosterFetch'
 import { ISearchedRosterResponse } from '@/types/fetchTypes'
 import { IRosterDomain } from '@/types/domainTypes'
 import OdStatusRadioButton from '@/components/odStatusRadioButton'
+import EditDaialog from '@/components/editDaialog'
 
 /******************************************************************
 * 変数定義
@@ -42,7 +43,7 @@ const yearSelectList = [
 /******************************************************************
 * コンポーネント関数
 *******************************************************************/
-const Row: React.FC<{ row: IRosterDomain, season: number }> = (props) => {
+const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: boolean) => void }> = (props) => {
     const { row, season } = props;
     const [open, setOpen] = React.useState(false);
   
@@ -62,6 +63,7 @@ const Row: React.FC<{ row: IRosterDomain, season: number }> = (props) => {
                 <TableCell align="center" className='cell'>
                     <Avatar className='avatar' alt="" src={row.player.image_url} />
                 </TableCell>
+                <TableCell align="center" className='cell'>{row.number}</TableCell>
                 <TableCell scope="row" className='cell'>
                     {`${row.player.firstname} ${row.player.lastname}`}
                 </TableCell>
@@ -69,7 +71,7 @@ const Row: React.FC<{ row: IRosterDomain, season: number }> = (props) => {
                 <TableCell align="center" className='cell'>{row.position.name}</TableCell>
                 <TableCell align="center" className='cell'>{row.rating}</TableCell>
                 <TableCell align="center" className='cell'>
-                    <Button variant="contained" color="primary" sx={{width: '10px'}}><EditIcon /></Button>
+                    <Button variant="contained" color="primary" sx={{width: '10px'}} onClick={() => props.openCallback(true)}><EditIcon /></Button>
                     <Button variant="contained" color="error" sx={{width: '10px'}}><DeleteIcon /></Button>
                 </TableCell>
             </TableRow>
@@ -98,6 +100,7 @@ const index: NextPage<Props> = ({data}) => {
     const [status, setStatus] = useState<number>(99)
     const [searchSeason, setSearchSeason] = useState<number>(defaultYear)
     const [selectTeam, setSelectTeam] = useState<number>(defaultTeam)
+    const [open, setOpen] = useState<boolean>(false)
     /**
      * 攻守ステータスの変更処理
      * @param value クリックしたステータスの値
@@ -123,6 +126,19 @@ const index: NextPage<Props> = ({data}) => {
         // データ再取得
         await fetch(searchSeason, team)
     }, [conf])
+    /**
+     * 編集モーダルの開閉処理
+     * @param value モーダル開閉の値
+     */
+    const changeOpenCallback = useCallback((value: boolean) => {
+        setOpen(value)
+    }, [open])
+    /**
+     * 保存処理
+     */
+    const editSaveCallback = () => {
+
+    }
 
     /**
      * データ取得API
@@ -145,6 +161,7 @@ const index: NextPage<Props> = ({data}) => {
                 <div className={styles.selectBox}>
                     <SelectBox label='Season' data={yearSelectList} selected={searchSeason} callback={useCallback(async (value: number) => {
                         setSearchSeason(value)
+                        console.log(selectTeam)
                         await fetch(value, selectTeam)
                     }, [searchSeason])} />
                 </div>
@@ -152,29 +169,28 @@ const index: NextPage<Props> = ({data}) => {
                     <TableSearchInput />
                 </div>
             </div>
+            <div>
+                <OdStatusRadioButton status={status} callback={changeStatusCallback} />
+            </div>
             <div className={styles.roster}>
-                <div className={`fx ${styles.selectButtonContainer}`}>
-                    <div className={styles.toggleButton}>
-                        <ToggleButton conf={conf} callback={changeConfCallback} />
-                    </div>
-                    <div>
-                        <OdStatusRadioButton status={status} callback={changeStatusCallback} />
-                    </div>
+                <div className={styles.toggleButton}>
+                    <ToggleButton conf={conf} callback={changeConfCallback} />
                 </div>
                 <TeamTabs data={json_team} selectConf={conf} selectTab={selectTeam} callback={useCallback(async (value) => {
                     setSelectTeam(value)
                     await fetch(searchSeason, value)
                 }, [selectTeam])} />
-                <div className={styles.tableContainer}>
+                <div className={`sm ${styles.tableContainer}`}>
                     <TableContainer className='baseTable' component={Paper}>
                         <Table aria-label="collapsible table">
                             <TableHead className='baseTableHeader'>
                                 <TableRow>
-                                    <TableCell className='cell' style={{width: '10%'}} />
+                                    <TableCell className='cell' style={{width: '5%'}} />
                                     <TableCell className='cell' style={{width: '10%'}} align="center">ID</TableCell>
                                     <TableCell className='cell' style={{width: '10%'}} align="center">Face</TableCell>
+                                    <TableCell className='cell' style={{width: '5%'}} align="center">Number</TableCell>
                                     <TableCell className='cell' style={{width: '25%'}} align="center">Name</TableCell>
-                                    <TableCell className='cell' style={{width: '10%'}} align="center">Age</TableCell>
+                                    <TableCell className='cell' style={{width: '5%'}} align="center">Age</TableCell>
                                     <TableCell className='cell' style={{width: '10%'}} align="center">Position</TableCell>
                                     <TableCell className='cell' style={{width: '10%'}} align="center">Rating</TableCell>
                                     <TableCell className='cell' style={{width: '15%'}} align="center">Option</TableCell>
@@ -182,12 +198,28 @@ const index: NextPage<Props> = ({data}) => {
                             </TableHead>
                             <TableBody className='baseTableBody'>
                                 {rosters.map((row) => (
-                                    <Row key={row.id} row={row} season={searchSeason} />
+                                    <Row key={row.id} row={row} season={searchSeason} openCallback={changeOpenCallback} />
                                 ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </div>
+                <div className='md'>
+                    {rosters.map((row) => (
+                        <div key={row.id} className={styles.cardContainer}>
+                            <PlayerCard roster={row} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div>
+                <EditDaialog 
+                    title='Roster' 
+                    open={open} 
+                    closeCallback={changeOpenCallback} 
+                    saveCallback={editSaveCallback} 
+                    renderForm={<div></div>}
+                />
             </div>
         </div>
     )

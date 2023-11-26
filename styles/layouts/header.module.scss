@@ -1,0 +1,122 @@
+.header {
+    @media screen and (max-width: $sm) {
+        background-color: $mainColor;
+        width: 100%;
+        position: sticky;
+        top: 0px;
+        z-index: 99;
+    
+        p {
+            color: $whiteColor;
+            font-weight: 600;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .topContainer {
+            background-color: $mainColor;
+            padding: 1rem 0;
+            position: relative;
+            z-index: 99;
+            .titleContainer {
+                margin-right: 10px;
+    
+                .logo {
+                    aspect-ratio: 1 / 1;
+                    width: 15%;
+                    margin-right: 8px;
+        
+                    & + p {
+                        font-family: $loraFont;
+                    }
+                }
+            }
+        }
+    
+        .menu {
+            background-color: $mainColor;
+            padding: 2rem 0;
+            width: 100%;
+            position: absolute;
+            top: -45rem;
+            transition: .7s;
+            z-index: 98;
+
+            ul {
+                text-align: center;
+                font-family: $notoFont;
+                font-weight: bold;
+                div {
+                    background-color: $mainColor;
+                    height: 25px;
+                    width: 100%;
+                    position: relative;
+                    z-index: 2;
+                }
+                li {
+                    align-items: center;
+                    color: $whiteColor;
+                    display: flex;
+                    justify-content: center;
+                    height: 4rem;
+                    margin: 1.8rem 0;
+                    animation-name:slideTextY20;
+                    animation-duration:0.8s;
+                    animation-fill-mode:forwards;
+                    opacity: 0;
+                    @keyframes slideTextY20 {
+                        from {
+                            transform: translateY(-20%); /*要素を上から下に移動*/
+                            opacity: 0;
+                        }
+                    
+                        to {
+                            transform: translateY(0);/*要素を元の位置に移動*/
+                            opacity: 1;
+                        }
+                    }
+                    &.active {
+                        color: $mainColor;
+                        height: calc(4rem + (1.8rem * 2));
+                        position: relative;
+                        z-index: 0;
+                        animation-name:slideTextX100;
+                        animation-delay: 0.4s;
+                        animation-duration:0.8s;
+                        animation-fill-mode:forwards;
+                        margin: 0;
+                        opacity: 0;
+                        @keyframes slideTextX100 {
+                            from {
+                                transform: translateX(50%); /*要素を左の枠外に移動*/
+                                opacity: 0;
+                            }
+                        
+                            to {
+                                transform: translateX(0);/*要素を元の位置に移動*/
+                                opacity: 1;
+                            }
+                        }
+                        &::before {
+                            background-color: $grayColor;
+                            bottom: 0;
+                            content: '';
+                            height: 100%;
+                            width: 100%;
+                            right: 0;
+                            position: absolute;
+                            z-index: -1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .slideinTop {
+        transform: translateY(50rem);
+        transition: all .3s linear;
+    }
+}

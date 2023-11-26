@@ -81,6 +81,9 @@
             color: transparent;
             background: repeating-linear-gradient( 45deg, #9E9E9E 0 0.1em, #000 0.1em 0.2em );
             -webkit-background-clip: text;
+            > p {
+                color: $dataColor;
+            }
         }
         .avatarContainer {
             aspect-ratio: 1;
@@ -147,5 +150,8 @@
 .odStatusRadioButton {
     .label {
         font-size: 1.5rem;
+    }
+    .inputLabel {
+        color: #000;
     }
 }

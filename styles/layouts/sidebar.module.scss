@@ -106,4 +106,7 @@
             }
         }
     }
+    @media screen and (max-width: $sm) {
+        display: none;
+    }
 }

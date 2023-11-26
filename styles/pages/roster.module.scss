@@ -23,6 +23,7 @@
     border-radius: 1rem;
     box-shadow: .3rem .3rem .3rem rgba(0, 0, 0, 0.2);
     color: black;
+    padding-bottom: 2.5rem;
 
     .tableContainer {
         padding: 1rem;
@@ -31,9 +32,12 @@
     .toggleButton {
         width: 36.8%;       // 803pxに対して296px
         margin-bottom: 1.5rem;
+        @media screen and (max-width: $sm) {
+            width: 75%;
+        }
     }
 
-    .selectButtonContainer {
-        gap: 2rem
+    .cardContainer {
+        margin-top: 1.7rem;
     }
 }

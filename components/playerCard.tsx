@@ -17,6 +17,7 @@ const PlayerCard: React.FC<IPlayerCard> = (props) => {
             <div className={styles.header}>
                 <div className={styles.position}>
                     {roster.position.name}
+                    <p>#{roster.number}</p>
                 </div>
                 <div className={styles.avatarContainer}>
                     <Avatar className={styles.avatar} alt="" src="/static/images/avatar/1.jpg" />

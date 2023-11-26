@@ -32,9 +32,9 @@ const OdStatusRadioButton: React.FC<IOdStatusRadioButton> = (props) => {
               value={props.status}
               onChange={handleChange}
             >
-                <FormControlLabel value={99} control={<Radio />} label="すべて" />
-                <FormControlLabel value={1} control={<Radio />} label="オフェンス" />
-                <FormControlLabel value={0} control={<Radio />} label="ディフェンス" />
+                <FormControlLabel className={styles.inputLabel} value={99} control={<Radio />} label="すべて" />
+                <FormControlLabel className={styles.inputLabel} value={1} control={<Radio />} label="オフェンス" />
+                <FormControlLabel className={styles.inputLabel} value={0} control={<Radio />} label="ディフェンス" />
             </RadioGroup>
         </FormControl>
     )

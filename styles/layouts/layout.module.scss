@@ -5,6 +5,7 @@
         background-color: $grayColor;
         border-radius: 3rem;
         box-shadow: .3rem .3rem .3rem rgba(0, 0, 0, 0.2);
+        min-height: 100vh;
         width: calc(100% - 15%);
         animation-name: fadeContents;
         animation: zoomIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
@@ -24,5 +25,12 @@
             width: 90%;
             margin: auto;
         }
+    }
+    @media screen and (max-width: $sm) {
+      display: block;
+      justify-content: center;
+      .main {
+        width: 100%;
+      }
     }
 }

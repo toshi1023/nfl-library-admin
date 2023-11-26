@@ -58,6 +58,12 @@ html {
     .fx {
         display: flex;
 
+        &.fx-right {
+            justify-content: right;
+        }
+        &.fx-left {
+            justify-content: left;
+        }
         &.align-center {
             align-items: center;
         }
@@ -67,6 +73,31 @@ html {
         &.center {
             align-items: center;
             justify-content: center;
+        }
+        &.between {
+            justify-content: space-between;
+        }
+    }
+
+    // レスポンシブ
+    .xs {
+        @media screen and (max-width: $xs) {
+            display: none;
+        }
+    }
+    .sm {
+        @media screen and (max-width: $sm) {
+            display: none;
+        }
+    }
+    .md {
+        @media screen and (min-width: $md) {
+            display: none;
+        }
+    }
+    .lg {
+        @media screen and (min-width: $lg) {
+            display: none;
         }
     }
 }
