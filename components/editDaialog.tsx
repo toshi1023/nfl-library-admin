@@ -27,7 +27,7 @@ interface IEditDialog {
     /**
      * モーダルに表示するフォームをjsxで渡す
      */
-    renderForm: React.ReactNode
+    renderForm: React.FC
 }
 
 /**
@@ -44,7 +44,7 @@ const EditDialog: React.FC<IEditDialog> = (props) => {
             <Dialog open={props.open} onClose={handleClose}>
                 <DialogTitle>{props.title} Edit</DialogTitle>
                 <DialogContent>
-                    {props.renderForm}
+                    {props.renderForm({})}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>

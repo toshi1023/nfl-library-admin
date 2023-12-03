@@ -4,22 +4,14 @@ import SelectBox from '@/components/selectBox'
 import TableSearchInput from '@/components/tableSearchInput'
 import ToggleButton from '@/components/toggleButton'
 import styles from '@/styles/pages/roster.module.scss'
-import PlayerCard from '../../components/playerCard';
+import PlayerCard from '../../components/playerCard'
 import { GetStaticProps, NextPage } from 'next'
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Collapse from '@mui/material/Collapse';
+import { 
+    Avatar, Box, Button, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, 
+    TableHead, TableRow, Paper, TextField
+} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import IconButton from '@mui/material/IconButton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import json_team from '@/data/team.json'
@@ -28,6 +20,7 @@ import { ISearchedRosterResponse } from '@/types/fetchTypes'
 import { IRosterDomain } from '@/types/domainTypes'
 import OdStatusRadioButton from '@/components/odStatusRadioButton'
 import EditDaialog from '@/components/editDaialog'
+import FormInput from '@/components/formInput'
 
 /******************************************************************
 * 変数定義
@@ -43,6 +36,11 @@ const yearSelectList = [
 /******************************************************************
 * コンポーネント関数
 *******************************************************************/
+/**
+ * テーブルの行データ表示用コンポーネント
+ * @param props 
+ * @returns 
+ */
 const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: boolean) => void }> = (props) => {
     const { row, season } = props;
     const [open, setOpen] = React.useState(false);
@@ -76,7 +74,7 @@ const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: 
                 </TableCell>
             </TableRow>
             <TableRow className='rowExpanded'>
-                <TableCell colSpan={8}>
+                <TableCell colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <PlayerCard roster={row} />
@@ -88,13 +86,33 @@ const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: 
     );
 }
 
+/**
+ * 編集フォーム用コンポーネント
+ * @returns 
+ */
+const editForm: React.FC = () => {
+    return (
+        <Box
+            component="form"
+            sx={{
+                '& .MuiTextField-root': { m: 1, width: '35ch' },
+            }}
+            noValidate
+            autoComplete="off"
+        >
+            <FormInput label='Number' value='99' validation={true} message='入力値が無効です' callback={(val) => {}} />
+            <FormInput label='Name' value='test' validation={false} message='' callback={(val) => {}} />
+        </Box>
+    )
+}
+
 /******************************************************************
 * メイン関数
 *******************************************************************/
 type Props = {
     data: ISearchedRosterResponse
 }
-const index: NextPage<Props> = ({data}) => {
+export default function index({data}: Props) {
     const [rosters, setRosters] = useState<IRosterDomain[]>(data.rosters)
     const [conf, setConf] = useState<number>(1)
     const [status, setStatus] = useState<number>(99)
@@ -218,7 +236,7 @@ const index: NextPage<Props> = ({data}) => {
                     open={open} 
                     closeCallback={changeOpenCallback} 
                     saveCallback={editSaveCallback} 
-                    renderForm={<div></div>}
+                    renderForm={editForm}
                 />
             </div>
         </div>
@@ -231,5 +249,3 @@ export const getStaticProps: GetStaticProps = async () => {
         props: { data },
     }
 }
-
-export default index
