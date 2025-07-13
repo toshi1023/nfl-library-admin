@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 
 interface IFormInput {
     label: string;                      // 入力項目のラベル
-    value: string;                      // 入力の初期データ
+    value: string | number;             // 入力の初期データ
     validation: boolean;                // エラーステータス
     message: string;                    // バリデーションメッセージ
     callback: (value: string) => void;  // 値変更処理を実行する関数
@@ -25,7 +25,10 @@ const FormInput: React.FC<IFormInput> = (props) => {
             helperText={props.message}
             onChange={() => props.callback}
             InputLabelProps={{
-                style: {fontSize: '1.5rem'}
+              style: {fontSize: '1.5rem', lineHeight: 1}
+            }}
+            InputProps={{
+              style: {backgroundColor: '#f5f5f5'}
             }}
         />
     </div>

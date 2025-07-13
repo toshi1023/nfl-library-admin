@@ -6,6 +6,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import BaseButton from './baseButton';
 
 interface IEditDialog {
     /**
@@ -23,11 +26,11 @@ interface IEditDialog {
     /**
      * 更新ボタンを押下した時の処理を渡す
      */
-    saveCallback: () => void;
+    saveCallback: <T>(props: T) => void;
     /**
      * モーダルに表示するフォームをjsxで渡す
      */
-    renderForm: React.FC
+    renderForm: () => React.ReactElement
 }
 
 /**
@@ -43,12 +46,24 @@ const EditDialog: React.FC<IEditDialog> = (props) => {
         <div>
             <Dialog open={props.open} onClose={handleClose}>
                 <DialogTitle>{props.title} Edit</DialogTitle>
+                <IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={(theme) => ({
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: theme.palette.grey[500],
+                    })}
+                    >
+                    <CloseIcon />
+                </IconButton>
                 <DialogContent>
-                    {props.renderForm({})}
+                    {props.renderForm()}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={props.saveCallback}>Register</Button>
+                    <BaseButton label='Register' callback={props.saveCallback}></BaseButton>
                 </DialogActions>
             </Dialog>
         </div>

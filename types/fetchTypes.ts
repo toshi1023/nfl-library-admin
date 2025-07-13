@@ -11,18 +11,29 @@ export interface ISearchQuery {
 }
 
 /******************************************************************
-* Response
+* 共通Response
 *******************************************************************/
 /**
- * 正常終了時のレスポンス共通型
+ * 正常終了時のレスポンス補足型定義
  */
 interface IInfoResponse {
     message: string | null;
     status: number;
 }
 /**
+ * 正常終了時のレスポンス共通型
+ */
+export interface ISuccessResponse<T> extends IInfoResponse {
+    data: T;
+}
+
+
+/******************************************************************
+* 個別Response
+*******************************************************************/
+/**
  * fetchSearchedRosterのレスポンス型
  */
-export interface ISearchedRosterResponse extends IInfoResponse {
-    rosters: IRosterDomain[];
+export interface ISearchedRosterResponse {
+    rosters: IRosterDomain[]; // レスポンスのデータ部分
 }

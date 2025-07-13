@@ -155,3 +155,17 @@
         color: #000;
     }
 }
+
+/******************************************************************
+* BaseButton
+*******************************************************************/
+.baseButton {
+    background-color: $mainColor;
+    color: $whiteColor;
+    border-radius: 3rem;
+    &:hover {
+        background-color: $mainColor;
+        mix-blend-mode:normal;
+        opacity: 0.5;
+    }
+}

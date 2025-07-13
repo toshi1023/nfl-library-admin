@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import TeamTabs from '@/components/teamTabs'
 import SelectBox from '@/components/selectBox'
 import TableSearchInput from '@/components/tableSearchInput'
 import ToggleButton from '@/components/toggleButton'
 import styles from '@/styles/pages/roster.module.scss'
 import PlayerCard from '../../components/playerCard'
-import { GetStaticProps, NextPage } from 'next'
+import { GetStaticProps } from 'next'
 import { 
     Avatar, Box, Button, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, 
-    TableHead, TableRow, Paper, TextField
+    TableHead, TableRow, Paper
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,8 +16,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import json_team from '@/data/team.json'
 import { fetchSearchedRoster } from '@/lib/rosterFetch'
-import { ISearchedRosterResponse } from '@/types/fetchTypes'
-import { IRosterDomain } from '@/types/domainTypes'
+import { ISuccessResponse, ISearchedRosterResponse } from '@/types/fetchTypes'
+import { IEditRosterDomain, IRosterDomain } from '@/types/domainTypes'
 import OdStatusRadioButton from '@/components/odStatusRadioButton'
 import EditDaialog from '@/components/editDaialog'
 import FormInput from '@/components/formInput'
@@ -41,7 +41,7 @@ const yearSelectList = [
  * @param props 
  * @returns 
  */
-const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: boolean) => void }> = (props) => {
+const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: boolean, roster: IRosterDomain | null) => void }> = (props) => {
     const { row, season } = props;
     const [open, setOpen] = React.useState(false);
   
@@ -69,7 +69,7 @@ const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: 
                 <TableCell align="center" className='cell'>{row.position.name}</TableCell>
                 <TableCell align="center" className='cell'>{row.rating}</TableCell>
                 <TableCell align="center" className='cell'>
-                    <Button variant="contained" color="primary" sx={{width: '10px'}} onClick={() => props.openCallback(true)}><EditIcon /></Button>
+                    <Button variant="contained" color="primary" sx={{width: '10px'}} onClick={() => props.openCallback(true, row)}><EditIcon /></Button>
                     <Button variant="contained" color="error" sx={{width: '10px'}}><DeleteIcon /></Button>
                 </TableCell>
             </TableRow>
@@ -86,34 +86,15 @@ const Row: React.FC<{ row: IRosterDomain, season: number, openCallback: (value: 
     );
 }
 
-/**
- * 編集フォーム用コンポーネント
- * @returns 
- */
-const editForm: React.FC = () => {
-    return (
-        <Box
-            component="form"
-            sx={{
-                '& .MuiTextField-root': { m: 1, width: '35ch' },
-            }}
-            noValidate
-            autoComplete="off"
-        >
-            <FormInput label='Number' value='99' validation={true} message='入力値が無効です' callback={(val) => {}} />
-            <FormInput label='Name' value='test' validation={false} message='' callback={(val) => {}} />
-        </Box>
-    )
-}
-
 /******************************************************************
 * メイン関数
 *******************************************************************/
 type Props = {
-    data: ISearchedRosterResponse
+    data: ISuccessResponse<ISearchedRosterResponse>
 }
 export default function index({data}: Props) {
-    const [rosters, setRosters] = useState<IRosterDomain[]>(data.rosters)
+    const [rosters, setRosters] = useState<IRosterDomain[]>(data.data.rosters)
+    const [editRoster, setEditRoster] = useState<IEditRosterDomain>()
     const [conf, setConf] = useState<number>(1)
     const [status, setStatus] = useState<number>(99)
     const [searchSeason, setSearchSeason] = useState<number>(defaultYear)
@@ -147,15 +128,38 @@ export default function index({data}: Props) {
     /**
      * 編集モーダルの開閉処理
      * @param value モーダル開閉の値
+     * @param roster rostersの１レコード
      */
-    const changeOpenCallback = useCallback((value: boolean) => {
+    const changeOpenCallback = useCallback((value: boolean, roster: IRosterDomain | null = null) => {
+        if(roster) {
+            const editRosterData: IEditRosterDomain = {
+                roster: {
+                    number: roster.number,
+                    position_id: roster.position.id,
+                    rating: roster.rating
+                },
+                player: {
+                    firstname: roster.player.firstname,
+                    lastname: roster.player.lastname,
+                    birthday: roster.player.birthday_date,
+                    height: roster.player.height,
+                    weight: roster.player.weight,
+                    college: roster.player.college,
+                    drafted_team: roster.player.drafted_team,
+                    drafted_round: roster.player.drafted_round,
+                    drafted_rank: roster.player.drafted_rank,
+                    drafted_year: roster.player.drafted_year
+                }
+            }
+            setEditRoster(editRosterData)
+        }
         setOpen(value)
     }, [open])
     /**
      * 保存処理
      */
-    const editSaveCallback = () => {
-
+    const editSaveCallback = (props: IEditRosterDomain): void => {
+        console.log('保存処理', props)
     }
 
     /**
@@ -170,7 +174,7 @@ export default function index({data}: Props) {
             conditions: ''
         }
         const data = await fetchSearchedRoster(query)
-        setRosters(data.rosters)
+        setRosters(data.data.rosters)
     }
 
     return (
@@ -224,7 +228,7 @@ export default function index({data}: Props) {
                 </div>
                 <div className='md'>
                     {rosters.map((row) => (
-                        <div key={row.id} className={styles.cardContainer}>
+                        <div key={row.id} className={styles.cardContainer} onClick={() => changeOpenCallback(true)}>
                             <PlayerCard roster={row} />
                         </div>
                     ))}
@@ -235,8 +239,28 @@ export default function index({data}: Props) {
                     title='Roster' 
                     open={open} 
                     closeCallback={changeOpenCallback} 
-                    saveCallback={editSaveCallback} 
-                    renderForm={editForm}
+                    saveCallback={() => editRoster && editSaveCallback(editRoster)} 
+                    renderForm={() => {
+                        return (
+                            editRoster ? 
+                                <Box
+                                    component="form"
+                                    sx={{
+                                        '& .MuiTextField-root': { m: 1, width: '35ch' },
+                                    }}
+                                    noValidate
+                                    autoComplete="off"
+                                >
+                                    <FormInput label='Number' value={editRoster.roster.number} validation={true} message='入力値が無効です' callback={(val) => {}} />
+                                    <FormInput label='Name' value={editRoster.player.firstname} validation={false} message='' callback={(val) => {}} />
+                                    <FormInput label='Name' value={editRoster.player.lastname} validation={false} message='' callback={(val) => {}} />
+                                    <FormInput label='Age' value={editRoster.player.birthday} validation={false} message='' callback={(val) => {}} />
+                                    <FormInput label='Position' value={editRoster.roster.position_id} validation={false} message='' callback={(val) => {}} />
+                                    <FormInput label='Rating' value={editRoster.roster.rating} validation={false} message='' callback={(val) => {}} />
+                                </Box>
+                            : <div></div> // editRosterがnullの場合は何も表示しない
+                        )
+                    }}
                 />
             </div>
         </div>

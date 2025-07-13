@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '@/styles/components/component.module.scss'
-import Avatar from '@mui/material/Avatar';
-import { IRosterDomain } from '@/types/domainTypes';
+import Avatar from '@mui/material/Avatar'
+import { IRosterDomain } from '@/types/domainTypes'
 
 interface IPlayerCard {
     /**
