@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import TeamTabs from '@/components/teamTabs'
 import SelectBox from '@/components/selectBox'
 import TableSearchInput from '@/components/tableSearchInput'
@@ -18,6 +18,9 @@ import json_team from '@/data/team.json'
 import { fetchSearchedRoster } from '@/lib/rosterFetch'
 import { ISuccessResponse, ISearchedRosterResponse } from '@/types/fetchTypes'
 import { IEditRosterDomain, IRosterDomain } from '@/types/domainTypes'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, AppDispatch } from '@/store'
+import { fetchRosters, setRosters } from '@/store/slices/rosterSlice'
 import OdStatusRadioButton from '@/components/odStatusRadioButton'
 import EditDaialog from '@/components/editDaialog'
 import FormInput from '@/components/formInput'
@@ -93,13 +96,23 @@ type Props = {
     data: ISuccessResponse<ISearchedRosterResponse>
 }
 export default function index({data}: Props) {
-    const [rosters, setRosters] = useState<IRosterDomain[]>(data.data.rosters)
+    const dispatch = useDispatch<AppDispatch>()
+    const rosters = useSelector((state: RootState) => state.roster.rosters)
+    const loading = useSelector((state: RootState) => state.roster.loading)
     const [editRoster, setEditRoster] = useState<IEditRosterDomain>()
     const [conf, setConf] = useState<number>(1)
     const [status, setStatus] = useState<number>(99)
     const [searchSeason, setSearchSeason] = useState<number>(defaultYear)
     const [selectTeam, setSelectTeam] = useState<number>(defaultTeam)
     const [open, setOpen] = useState<boolean>(false)
+    
+    // 初期データのセット
+    useEffect(() => {
+        if (rosters.length === 0) {
+            dispatch(setRosters(data.data.rosters))
+        }
+    }, [rosters.length, data.data.rosters, dispatch])
+
     /**
      * 攻守ステータスの変更処理
      * @param value クリックしたステータスの値
@@ -173,8 +186,7 @@ export default function index({data}: Props) {
             team: team,
             conditions: ''
         }
-        const data = await fetchSearchedRoster(query)
-        setRosters(data.data.rosters)
+        dispatch(fetchRosters(query))
     }
 
     return (
